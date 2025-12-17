@@ -260,6 +260,7 @@
         /* Section Styles */
         section {
             padding: 5rem 0;
+            min-height: calc(100vh - 80px); /* accounts for fixed navbar */
         }
 
         .section-title {
@@ -284,99 +285,156 @@
         }
 
         /* Skills Section */
-        .skills-grid {
+        /* ===== Skills (Level Bars) Redesign ===== */
+        .skills-bars {
+            max-width: 1100px;              /* wider so 2 columns don’t feel cramped */
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: 1fr 1fr; /* ✅ 2 columns */
+            gap: 1.75rem;                   /* a bit more breathing room */
+            align-items: stretch;
         }
 
-        .skill-card {
+        .skill-row {
             background: var(--dark-light);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            transition: all 0.3s;
-            cursor: pointer;
+            border: 1px solid rgba(99,102,241,.2);
+            border-radius: 14px;
+            padding: 1.2rem 1.25rem;
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+            text-align: left;               /* ✅ not centered */
         }
 
-        .skill-card:hover {
-            transform: translateY(-10px);
+        .skill-row:hover {
+            transform: translateY(-6px);
             border-color: var(--primary);
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 40px rgba(99,102,241,.25);
         }
 
-        .skill-card h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .skill-tags {
+        .skill-top {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: .65rem;
         }
 
-        .tag {
-            background: rgba(99, 102, 241, 0.2);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
+        .skill-name {
+            font-weight: 700;
             color: var(--text);
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            letter-spacing: .2px;
+        }
+
+        .skill-level-text {
+            color: var(--text-muted);
+            font-size: .95rem;
+            white-space: nowrap;
+        }
+
+        .skill-meter {
+            height: 12px;
+            width: 100%;
+            border-radius: 999px;
+            background: rgba(148,163,184,.18);
+            border: 1px solid rgba(148,163,184,.25);
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            box-shadow: 0 0 18px rgba(6,182,212,.25);
+            transition: width 1s ease;
+        }
+
+        /* Optional: show small ticks under bar */
+        .skill-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: .45rem;
+            font-size: .75rem;
+            color: rgba(148,163,184,.8);
         }
 
         /* Experience Section */
         .timeline {
             position: relative;
-            padding-left: 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 0;
         }
 
+        /* Center vertical line */
         .timeline::before {
             content: '';
             position: absolute;
-            left: 0;
+            left: 50%;
             top: 0;
+            transform: translateX(-50%);
             height: 100%;
             width: 2px;
             background: linear-gradient(180deg, var(--primary), var(--accent));
         }
 
+        /* Timeline item wrapper */
         .timeline-item {
             position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             margin-bottom: 3rem;
-            padding-left: 2rem;
         }
 
+        /* Timeline dot */
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: -3.5rem;
-            top: 0;
+            left: 50%;
+            top: 1.25rem;
+            transform: translateX(-50%);
             width: 12px;
             height: 12px;
             background: var(--primary);
             border-radius: 50%;
             border: 3px solid var(--dark);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            z-index: 2;
         }
 
+        /* Shared card styling */
         .timeline-content {
             background: var(--dark-light);
             padding: 1.5rem;
             border-radius: 12px;
             border-left: 3px solid var(--primary);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+            max-width: 520px;
         }
 
+        /* LEFT items */
+        .timeline-item.left .timeline-content {
+            grid-column: 1 / 2;
+            justify-self: end;
+            margin-right: 2.5rem;
+        }
+
+        /* RIGHT items */
+        .timeline-item.right .timeline-content {
+            grid-column: 2 / 3;
+            justify-self: start;
+            margin-left: 2.5rem;
+        }
+
+        /* Typography (unchanged, refined spacing) */
         .timeline-content h3 {
             color: var(--primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .timeline-content .company {
             color: var(--accent);
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .timeline-content .date {
@@ -591,6 +649,37 @@
             .section-title {
                 font-size: 2rem;
             }
+
+            .skill-top { 
+                flex-direction: column; 
+                align-items: flex-start;
+            } 
+            
+            .skill-level-text { 
+                font-size: .9rem; 
+            }
+
+            .timeline::before {
+                left: 20px;
+                transform: none;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+                padding-left: 3rem;
+            }
+
+            .timeline-item::before {
+                left: 20px;
+                transform: none;
+            }
+
+            .timeline-item.left .timeline-content,
+            .timeline-item.right .timeline-content {
+                grid-column: 1 / -1;
+                justify-self: stretch;
+                margin: 0;
+            }
         }
     </style>
 </head>
@@ -627,8 +716,9 @@
                 <div class="hero-visual">
                     <div class="profile-photo-container">
                         <!-- Replace the src with your photo URL or leave as placeholder -->
-                        <!-- Example: <img src="your-photo.jpg" alt="Mohnish Ramachandran" class="profile-photo"> -->
-                        <div class="profile-placeholder">👨‍💻</div>
+                        <img src="./assets/me.jpg" alt="Mohnish Ramachandran" class="profile-photo", loading="lazy">
+                        <!-- <div class="profile-placeholder hidden" id="profileFallback" aria-hidden="true">MR</div> -->
+                        <!-- <div class="profile-placeholder">👨‍💻</div> -->
                     </div>
                 </div>
             </div>
@@ -639,74 +729,135 @@
     <section id="skills">
         <div class="container">
             <h2 class="section-title">Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card fade-in">
-                    <h3>Languages</h3>
-                    <div class="skill-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">C++</span>
-                        <span class="tag">SQL</span>
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                    </div>
+
+            <div class="skills-bars">
+            <!-- Languages -->
+            <div class="skill-row fade-in" data-level="90" data-label="Expert">
+                <div class="skill-top">
+                <div class="skill-name">Python</div>
+                <div class="skill-level-text">Expert</div>
                 </div>
-                <div class="skill-card fade-in">
-                    <h3>AI/ML Frameworks</h3>
-                    <div class="skill-tags">
-                        <span class="tag">PyTorch</span>
-                        <span class="tag">TensorFlow</span>
-                        <span class="tag">Scikit-learn</span>
-                        <span class="tag">OpenCV</span>
-                        <span class="tag">Hugging Face</span>
-                        <span class="tag">Transformers</span>
-                    </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="40" data-label="Intermediate">
+                <div class="skill-top">
+                <div class="skill-name">C++</div>
+                <div class="skill-level-text">Intermediate</div>
                 </div>
-                <div class="skill-card fade-in">
-                    <h3>Tools & Technologies</h3>
-                    <div class="skill-tags">
-                        <span class="tag">Git</span>
-                        <span class="tag">Docker</span>
-                        <span class="tag">FastAPI</span>
-                        <span class="tag">Streamlit</span>
-                        <span class="tag">MySQL</span>
-                        <span class="tag">Tableau</span>
-                    </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="75" data-label="Advanced">
+                <div class="skill-top">
+                <div class="skill-name">SQL</div>
+                <div class="skill-level-text">Advanced</div>
                 </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <!-- ML / CV -->
+            <div class="skill-row fade-in" data-level="85" data-label="Advanced">
+                <div class="skill-top">
+                <div class="skill-name">PyTorch</div>
+                <div class="skill-level-text">Advanced</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="85" data-label="Advanced">
+                <div class="skill-top">
+                <div class="skill-name">TensorFlow / Keras</div>
+                <div class="skill-level-text">Advanced</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="80" data-label="Advanced">
+                <div class="skill-top">
+                <div class="skill-name">Computer Vision (OpenCV)</div>
+                <div class="skill-level-text">Advanced</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="65" data-label="Intermediate">
+                <div class="skill-top">
+                <div class="skill-name">Hugging Face (Transformers)</div>
+                <div class="skill-level-text">Intermediate</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <!-- Tools -->
+            <div class="skill-row fade-in" data-level="75" data-label="Advanced">
+                <div class="skill-top">
+                <div class="skill-name">Git / GitHub</div>
+                <div class="skill-level-text">Advanced</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="60" data-label="Intermediate">
+                <div class="skill-top">
+                <div class="skill-name">Docker</div>
+                <div class="skill-level-text">Intermediate</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
+
+            <div class="skill-row fade-in" data-level="70" data-label="Advanced">
+                <div class="skill-top">
+                <div class="skill-name">Streamlit</div>
+                <div class="skill-level-text">Advanced</div>
+                </div>
+                <div class="skill-meter"><div class="skill-fill"></div></div>
+                <div class="skill-scale"><span>Beginner</span><span>Intermediate</span><span>Advanced</span><span>Expert</span></div>
+            </div>
             </div>
         </div>
     </section>
 
+
     <!-- Experience Section -->
     <section id="experience">
-        <div class="container">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item fade-in">
-                    <div class="timeline-content">
-                        <h3>Research Fellowship</h3>
-                        <div class="company">HyperVerge Inc.</div>
-                        <div class="date">Feb 2024 - June 2024 | India</div>
-                        <ul>
-                            <li>Led qualitative and quantitative analysis of deepfakes</li>
-                            <li>Implemented SOTA deepfake detection models using auto-encoder and GANs</li>
-                            <li>Developed generalization strategies for deepfake detection</li>
-                            <li>Led a team of 6 researchers and served as liaison with industry professionals</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="timeline-item fade-in">
-                    <div class="timeline-content">
-                        <h3>Data Analyst Intern</h3>
-                        <div class="company">Olimind Inc.</div>
-                        <div class="date">Jun 2023 - July 2023 | San Francisco, CA</div>
-                        <ul>
-                            <li>Analyzed user data to identify trends and patterns</li>
-                            <li>Created interactive dashboards in Looker Studio for real-time monitoring</li>
-                            <li>Reduced manual report preparation time for mentors</li>
-                        </ul>
-                    </div>
-                </div>
+        <h2 class="section-title">Experience</h2>
+        <div class="timeline">
+        <div class="timeline-item left fade-in">
+            <div class="timeline-content">
+            <h3>Research Fellowship</h3>
+            <div class="company">HyperVerge Inc.</div>
+            <div class="date">Feb 2024 - June 2024 | India</div>
+            <ul>
+                <li>Led qualitative and quantitative analysis of deepfakes</li>
+                <li>Implemented SOTA deepfake detection models using auto-encoder and GANs</li>
+                <li>Developed generalization strategies for deepfake detection</li>
+                <li>Led a team of 6 researchers and served as liaison with industry professionals</li>
+            </ul>
             </div>
+        </div>
+
+        <div class="timeline-item right fade-in">
+            <div class="timeline-content">
+            <h3>Data Analyst Intern</h3>
+            <div class="company">Olimind Inc.</div>
+            <div class="date">Jun 2023 - July 2023 | San Francisco, CA</div>
+            <ul>
+                <li>Analyzed user data to identify trends and patterns</li>
+                <li>Created interactive dashboards in Looker Studio for real-time monitoring</li>
+                <li>Reduced manual report preparation time for mentors</li>
+            </ul>
+            </div>
+        </div>
         </div>
     </section>
 
@@ -823,6 +974,22 @@
                 }
             });
         });
+
+        // ===== Skills bar fill animation =====
+        function setSkillBars() {
+        document.querySelectorAll('.skill-row').forEach(row => {
+            const level = row.getAttribute('data-level') || "0";
+            const fill = row.querySelector('.skill-fill');
+            if (fill) fill.style.width = level + "%";
+
+            // Optional: auto-set the right-side label from data-label
+            const label = row.getAttribute('data-label');
+            const labelEl = row.querySelector('.skill-level-text');
+            if (label && labelEl) labelEl.textContent = label;
+        });
+        }
+
+        window.addEventListener('load', setSkillBars);
     </script>
 </body>
 </html>
